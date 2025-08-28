@@ -1,0 +1,191 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header">
+	<nav class="nav">
+		<div class="container">
+			<div class="nav-content">
+				<div class="logo">
+					<a href="/" class="logo-link">
+						<div class="logo-icon">🚢</div>
+						<span class="logo-text">Super Shine Cargo</span>
+					</a>
+				</div>
+				
+				<div class="nav-links">
+					<a href="/" class={currentPath === '/' ? 'nav-link active' : 'nav-link'}>Home</a>
+					<a href="/about" class={currentPath === '/about/' ? 'nav-link active' : 'nav-link'}>About</a>
+					<a href="/services" class={currentPath === '/services/' ? 'nav-link active' : 'nav-link'}>Services</a>
+					<a href="/contact" class={currentPath === '/contact/' ? 'nav-link active' : 'nav-link'}>Contact</a>
+					<a href="/contact" class="btn btn-primary get-quote-btn">Get Quote</a>
+				</div>
+
+				<button class="mobile-menu-btn" id="mobile-menu-btn">
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+			</div>
+		</div>
+	</nav>
+
+	<div class="mobile-menu" id="mobile-menu">
+		<a href="/" class="mobile-nav-link">Home</a>
+		<a href="/about" class="mobile-nav-link">About</a>
+		<a href="/services" class="mobile-nav-link">Services</a>
+		<a href="/contact" class="mobile-nav-link">Contact</a>
+	</div>
+</header>
+
+<style>
+	.header {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+		border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+	}
+
+	.nav {
+		padding: 1rem 0;
+	}
+
+	.nav-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.logo-link {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		color: #1E40AF;
+		font-weight: 700;
+		font-size: 1.25rem;
+	}
+
+	.logo-icon {
+		font-size: 2rem;
+		margin-right: 0.5rem;
+	}
+
+	.nav-links {
+		display: flex;
+		gap: 2rem;
+		align-items: center;
+	}
+
+	.nav-link {
+		text-decoration: none;
+		color: #4b5563;
+		font-weight: 500;
+		padding: 0.5rem 0;
+		position: relative;
+		transition: color 0.3s ease;
+	}
+
+	.nav-link:hover,
+	.nav-link.active {
+		color: #1E40AF;
+	}
+
+	.nav-link.active::after {
+		content: '';
+		position: absolute;
+		bottom: -0.5rem;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: #1E40AF;
+		border-radius: 1px;
+	}
+
+	.get-quote-btn {
+		margin-left: 1rem;
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+	}
+
+	.get-quote-mobile {
+		background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+		color: white !important;
+		border-radius: 0.5rem;
+		padding: 0.75rem;
+		text-align: center;
+		font-weight: 600;
+		margin-top: 0.5rem;
+	}
+
+	.mobile-menu-btn {
+		display: none;
+		flex-direction: column;
+		gap: 4px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.5rem;
+	}
+
+	.mobile-menu-btn span {
+		width: 24px;
+		height: 2px;
+		background: #1E40AF;
+		transition: 0.3s;
+	}
+
+	.mobile-menu {
+		display: none;
+		position: fixed;
+		top: 80px;
+		left: 0;
+		right: 0;
+		background: white;
+		border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+		padding: 1rem;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.mobile-nav-link {
+		text-decoration: none;
+		color: #4b5563;
+		font-weight: 500;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid #f3f4f6;
+	}
+
+	@media (max-width: 768px) {
+		.nav-links {
+			display: none;
+		}
+
+		.mobile-menu-btn {
+			display: flex;
+		}
+
+		.mobile-menu.active {
+			display: flex;
+		}
+	}
+</style>
+
+<script>
+	const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+	const mobileMenu = document.getElementById('mobile-menu');
+
+	mobileMenuBtn?.addEventListener('click', () => {
+		mobileMenu?.classList.toggle('active');
+	});
+
+	// Close mobile menu when clicking on links
+	document.querySelectorAll('.mobile-nav-link').forEach(link => {
+		link.addEventListener('click', () => {
+			mobileMenu?.classList.remove('active');
+		});
+	});
+</script>
