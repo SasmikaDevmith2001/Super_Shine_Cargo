@@ -599,16 +599,9 @@ import Footer from '../components/Footer.astro';
 		submitButton.textContent = 'Sending...';
 		submitButton.disabled = true;
 		
-		// Send to Supabase Edge Function
-		const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-		const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-		
-		if (!supabaseUrl || !supabaseKey) {
-			alert('Configuration error. Please contact the administrator.');
-			submitButton.textContent = originalText;
-			submitButton.disabled = false;
-			return;
-		}
+		// Use hardcoded values from your .env file
+		const supabaseUrl = 'https://lwcdhsakltnxolsxpjvb.supabase.co';
+		const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3Y2Roc2FrbHRueG9sc3hwanZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNjc3MDMsImV4cCI6MjA3MTk0MzcwM30.Y9eBxaBJWCLS10d91_0QOgHRB_vlMNJf0mFQ8Pwi6bY';
 		
 		fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
 			method: 'POST',
@@ -618,7 +611,12 @@ import Footer from '../components/Footer.astro';
 			},
 			body: JSON.stringify(data)
 		})
-		.then(response => response.json())
+		.then(response => {
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			return response.json();
+		})
 		.then(result => {
 			if (result.success) {
 				alert('Thank you for your message! We will get back to you within 24 hours.');
@@ -637,7 +635,7 @@ import Footer from '../components/Footer.astro';
 		});
 	});
 
-	// Smooth scroll for anchor links (already present, no change needed)
+	// Smooth scroll for anchor links
 	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 		anchor.addEventListener('click', function (e) {
 			e.preventDefault();
@@ -651,7 +649,5 @@ import Footer from '../components/Footer.astro';
 		});
 	});
 
-  console.log("Supabase URL:", import.meta.env.VITE_SUPABASE_URL);
-  console.log("Supabase Key:", import.meta.env.VITE_SUPABASE_ANON_KEY?.slice(0, 10) + "...");
-
+	console.log("Contact form script loaded successfully");
 </script>
