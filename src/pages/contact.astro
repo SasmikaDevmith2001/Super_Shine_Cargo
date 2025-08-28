@@ -1,657 +1,84 @@
----
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
----
+  // Get the contact form
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-<Layout title="Contact Us - Super Shine Cargo" description="Get in touch with Super Shine Cargo for all your logistics needs. Contact us for quotes, inquiries, and customer support">
-	<Header />
-	
-	<!-- Hero Section -->
-	<section class="page-hero">
-		<div class="hero-overlay"></div>
-		<div class="container">
-			<div class="hero-content">
-				<h1 class="hero-title">Contact</h1>
-			</div>
-		</div>
-	</section>
+      const submitButton = form.querySelector('.form-submit');
+      const originalText = submitButton.textContent;
 
-	<main style="padding-top: 80px;">
-		<!-- Hero Section -->
-		<section class="contact-hero section">
-			<div class="container">
-				<h1 class="section-title">Contact Us</h1>
-				<p class="section-subtitle">
-					Ready to ship your cargo? Get in touch with our expert team for personalized logistics solutions
-				</p>
-			</div>
-		</section>
+      submitButton.textContent = 'Sending...';
+      submitButton.disabled = true;
 
-		<!-- Contact Form & Info Section -->
-		<section class="section contact-main">
-			<div class="container">
-				<div class="contact-content">
-					<!-- Contact Form -->
-					<div class="contact-form-section">
-						<h2>Send Us a Message</h2>
-						<p>Fill out the form below and we'll get back to you within 24 hours</p>
-						
-						<form class="contact-form" id="contact-form">
-							<div class="form-row">
-								<div class="form-group">
-									<label for="firstName">First Name *</label>
-									<input type="text" id="firstName" name="firstName" required>
-								</div>
-								<div class="form-group">
-									<label for="lastName">Last Name *</label>
-									<input type="text" id="lastName" name="lastName" required>
-								</div>
-							</div>
-							
-							<div class="form-row">
-								<div class="form-group">
-									<label for="email">Email Address *</label>
-									<input type="email" id="email" name="email" required>
-								</div>
-								<div class="form-group">
-									<label for="phone">Phone Number</label>
-									<input type="tel" id="phone" name="phone">
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label for="company">Company Name</label>
-								<input type="text" id="company" name="company">
-							</div>
-							
-							<div class="form-group">
-								<label for="service">Service Required *</label>
-								<select id="service" name="service" required>
-									<option value="">Select a service...</option>
-									<option value="import-export">Import & Export</option>
-									<option value="customs-clearance">Customs Clearance</option>
-									<option value="air-freight">Air Freight</option>
-									<option value="sea-freight">Sea Freight</option>
-									<option value="warehousing">Warehousing</option>
-									<option value="project-cargo">Project Cargo</option>
-									<option value="other">Other</option>
-								</select>
-							</div>
-							
-							<div class="form-row">
-								<div class="form-group">
-									<label for="origin">Origin Country/Port</label>
-									<input type="text" id="origin" name="origin" placeholder="Where is your cargo coming from?">
-								</div>
-								<div class="form-group">
-									<label for="destination">Destination</label>
-									<input type="text" id="destination" name="destination" placeholder="Where is it going?">
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label for="cargoDetails">Cargo Details</label>
-								<textarea id="cargoDetails" name="cargoDetails" rows="3" placeholder="Type of goods, weight, dimensions, etc."></textarea>
-							</div>
-							
-							<div class="form-group">
-								<label for="message">Additional Message *</label>
-								<textarea id="message" name="message" rows="4" placeholder="Tell us more about your requirements..." required></textarea>
-							</div>
-							
-							<button type="submit" class="btn btn-primary form-submit">Send Message</button>
-						</form>
-					</div>
+      // Collect form data
+      const formData = Object.fromEntries(new FormData(form));
 
-					<!-- Contact Information -->
-					<div class="contact-info-section">
-						<h2>Get in Touch</h2>
-						<p>Reach out to us through any of these channels</p>
-						
-						<div class="contact-methods">
-							<div class="contact-method">
-								<div class="method-icon">
-									<svg viewBox="0 0 24 24" fill="currentColor">
-										<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-									</svg>
-								</div>
-								<div class="method-content">
-									<h3>Head Office</h3>
-									<p>Super Shine Cargo (Pvt) Ltd<br>
-									[Insert Address Here]<br>
-									Colombo, Sri Lanka</p>
-								</div>
-							</div>
-							
-							<div class="contact-method">
-								<div class="method-icon">
-									<svg viewBox="0 0 24 24" fill="currentColor">
-										<path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-									</svg>
-								</div>
-								<div class="method-content">
-									<h3>Phone</h3>
-									<p><a href="tel:+94xxxxxxxx">+94 [Insert Number]</a></p>
-								</div>
-							</div>
-							
-							<div class="contact-method">
-								<div class="method-icon">
-									<svg viewBox="0 0 24 24" fill="currentColor">
-										<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-									</svg>
-								</div>
-								<div class="method-content">
-									<h3>Email</h3>
-									<p><a href="mailto:info@supershinecargo.lk">info@supershinecargo.lk</a></p>
-								</div>
-							</div>
-							
-							<div class="contact-method">
-								<div class="method-icon">
-									<svg viewBox="0 0 24 24" fill="currentColor">
-										<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H6.99C4.58 7 2.4 8.58 2.4 11.99c0 3.41 2.18 5.99 4.59 5.99H11v-1.9H6.99c-1.71 0-3.09-1.39-3.09-3.1zM8 13h8v-2H8v2zm5-6h4.01c2.41 0 4.59 2.58 4.59 5.99 0 3.41-2.18 5.99-4.59 5.99H13v-1.9h4.01c1.71 0 3.09-1.39 3.09-3.1 0-1.71-1.39-3.1-3.1-3.1H13V7z"/>
-									</svg>
-								</div>
-								<div class="method-content">
-									<h3>Website</h3>
-									<p><a href="https://www.supershinecargo.lk">www.supershinecargo.lk</a></p>
-								</div>
-							</div>
-						</div>
+      // Simple validation
+      const requiredFields = ['firstName', 'lastName', 'email', 'service', 'message'];
+      for (const field of requiredFields) {
+        if (!formData[field]) {
+          alert('Please fill in all required fields.');
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
+          return;
+        }
+      }
 
-						<div class="business-hours">
-							<h3>Business Hours</h3>
-							<div class="hours-list">
-								<div class="hours-item">
-									<span>Monday - Friday:</span>
-									<span>8:00 AM - 6:00 PM</span>
-								</div>
-								<div class="hours-item">
-									<span>Saturday:</span>
-									<span>8:00 AM - 2:00 PM</span>
-								</div>
-								<div class="hours-item">
-									<span>Sunday:</span>
-									<span>Closed</span>
-								</div>
-								<div class="hours-item emergency">
-									<span>Emergency Service:</span>
-									<span>24/7 Available</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+      // Environment variables
+      const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+      const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-		<!-- Quick Contact Section -->
-		<section class="section quick-contact">
-			<div class="container">
-				<div class="quick-contact-content">
-					<div class="quick-contact-item">
-						<div class="quick-icon">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-							</svg>
-						</div>
-						<h3>Call Us Now</h3>
-						<p>Speak directly with our logistics experts</p>
-						<a href="tel:+94xxxxxxxx" class="btn btn-primary">+94 [Insert Number]</a>
-					</div>
-					
-					<div class="quick-contact-item">
-						<div class="quick-icon">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-							</svg>
-						</div>
-						<h3>Email Us</h3>
-						<p>Send us your inquiry anytime</p>
-						<a href="mailto:info@supershinecargo.lk" class="btn btn-primary">Send Email</a>
-					</div>
-					
-					<div class="quick-contact-item">
-						<div class="quick-icon">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-							</svg>
-						</div>
-						<h3>Get a Quote</h3>
-						<p>Request a customized shipping quote</p>
-						<a href="#contact-form" class="btn btn-primary">Request Quote</a>
-					</div>
-				</div>
-			</div>
-		</section>
+      if (!SUPABASE_URL || !SUPABASE_KEY) {
+        alert('Configuration error. Supabase credentials not found.');
+        console.error('Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY');
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        return;
+      }
 
-		<!-- FAQ Section -->
-		<section class="section faq-section">
-			<div class="container">
-				<h2 class="section-title">Frequently Asked Questions</h2>
-				<p class="section-subtitle">
-					Quick answers to common questions about our services
-				</p>
-				
-				<div class="faq-grid">
-					<div class="faq-item">
-						<h3>How do I get a shipping quote?</h3>
-						<p>Simply fill out our contact form with your cargo details, or call us directly. We'll provide a customized quote within 24 hours.</p>
-					</div>
-					
-					<div class="faq-item">
-						<h3>What documents do I need for customs clearance?</h3>
-						<p>Required documents typically include commercial invoice, packing list, bill of lading, and any specific permits. Our team will guide you through the process.</p>
-					</div>
-					
-					<div class="faq-item">
-						<h3>Do you provide cargo insurance?</h3>
-						<p>Yes, we offer comprehensive cargo insurance options to protect your shipment against unforeseen circumstances during transit.</p>
-					</div>
-					
-					<div class="faq-item">
-						<h3>How can I track my shipment?</h3>
-						<p>We provide tracking information for all shipments. You'll receive regular updates via email and phone throughout the shipping process.</p>
-					</div>
-					
-					<div class="faq-item">
-						<h3>What types of cargo do you handle?</h3>
-						<p>We handle all types of cargo including general goods, machinery, perishables, hazardous materials, and project cargo. Contact us for specific requirements.</p>
-					</div>
-					
-					<div class="faq-item">
-						<h3>Do you offer warehousing services?</h3>
-						<p>Yes, we provide secure warehousing and storage solutions with both short-term and long-term options available.</p>
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
+      // Full Edge Function URL
+      const functionUrl = 'https://lwcdhsakltnxolsxpjvb.supabase.co/functions/v1/send-contact-email';
 
-	<Footer />
-</Layout>
+      try {
+        const response = await fetch(functionUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+          },
+          body: JSON.stringify(formData)
+        });
 
-<style>
-	.page-hero {
-		min-height: 40vh;
-		background-image: url('https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg');
-		background-size: cover;
-		background-position: center;
-		display: flex;
-		align-items: center;
-		position: relative;
-		padding-top: 80px;
-	}
+        const result = await response.json();
 
-	.hero-overlay {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
-	}
+        if (response.ok && result.success) {
+          alert('Thank you for your message! We will get back to you within 24 hours.');
+          form.reset();
+        } else {
+          console.error('Error response from function:', result);
+          throw new Error(result.error || 'Failed to send message.');
+        }
 
-	.hero-content {
-		position: relative;
-		z-index: 1;
-		text-align: center;
-		color: white;
-	}
+      } catch (err) {
+        console.error('Fetch error:', err);
+        alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
+      } finally {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+      }
+    });
+  }
 
-	.hero-title {
-		font-size: 3rem;
-		font-weight: 700;
-		margin: 0;
-	}
-
-	.contact-hero {
-		background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-		padding: 4rem 0;
-		text-align: center;
-	}
-
-	.contact-main {
-		background: white;
-	}
-
-	.contact-content {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 4rem;
-		align-items: flex-start;
-	}
-
-	.contact-form-section h2,
-	.contact-info-section h2 {
-		font-size: 1.75rem;
-		font-weight: 600;
-		color: #1E40AF;
-		margin-bottom: 1rem;
-	}
-
-	.contact-form-section p,
-	.contact-info-section p {
-		color: #6b7280;
-		margin-bottom: 2rem;
-	}
-
-	.contact-form {
-		background: #f8fafc;
-		padding: 2rem;
-		border-radius: 1rem;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-	}
-
-	.form-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-	}
-
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-
-	.form-group label {
-		display: block;
-		font-weight: 500;
-		color: #374151;
-		margin-bottom: 0.5rem;
-	}
-
-	.form-group input,
-	.form-group select,
-	.form-group textarea {
-		width: 100%;
-		padding: 0.75rem;
-		border: 2px solid #e5e7eb;
-		border-radius: 0.5rem;
-		font-size: 1rem;
-		transition: border-color 0.3s ease;
-	}
-
-	.form-group input:focus,
-	.form-group select:focus,
-	.form-group textarea:focus {
-		outline: none;
-		border-color: #3B82F6;
-	}
-
-	.form-submit {
-		width: 100%;
-		padding: 1rem;
-		font-size: 1.1rem;
-		margin-top: 1rem;
-	}
-
-	.contact-methods {
-		margin-bottom: 3rem;
-	}
-
-	.contact-method {
-		display: flex;
-		align-items: flex-start;
-		gap: 1rem;
-		margin-bottom: 2rem;
-		padding: 1.5rem;
-		background: #f8fafc;
-		border-radius: 1rem;
-		border-left: 4px solid #3B82F6;
-	}
-
-	.method-icon {
-		width: 2rem;
-		height: 2rem;
-		color: #3B82F6;
-		flex-shrink: 0;
-	}
-
-	.method-icon svg {
-		width: 100%;
-		height: 100%;
-	}
-
-	.method-content h3 {
-		font-size: 1.125rem;
-		font-weight: 600;
-		color: #1E40AF;
-		margin-bottom: 0.5rem;
-	}
-
-	.method-content p {
-		color: #4b5563;
-		margin: 0;
-		line-height: 1.6;
-	}
-
-	.method-content a {
-		color: #1E40AF;
-		text-decoration: none;
-	}
-
-	.method-content a:hover {
-		text-decoration: underline;
-	}
-
-	.business-hours {
-		background: #f8fafc;
-		padding: 2rem;
-		border-radius: 1rem;
-		border: 2px solid #e2e8f0;
-	}
-
-	.business-hours h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: #1E40AF;
-		margin-bottom: 1rem;
-	}
-
-	.hours-item {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0.5rem 0;
-		border-bottom: 1px solid #e5e7eb;
-	}
-
-	.hours-item:last-child {
-		border-bottom: none;
-	}
-
-	.hours-item.emergency {
-		background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
-		color: white;
-		padding: 0.75rem;
-		border-radius: 0.5rem;
-		margin-top: 1rem;
-		border: none;
-	}
-
-	.quick-contact {
-		background: #f8fafc;
-	}
-
-	.quick-contact-content {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 2rem;
-	}
-
-	.quick-contact-item {
-		background: white;
-		padding: 2rem;
-		text-align: center;
-		border-radius: 1rem;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-		transition: transform 0.3s ease;
-	}
-
-	.quick-contact-item:hover {
-		transform: translateY(-5px);
-	}
-
-	.quick-icon {
-		width: 3rem;
-		height: 3rem;
-		color: #3B82F6;
-		margin-bottom: 1rem;
-	}
-
-	.quick-icon svg {
-		width: 100%;
-		height: 100%;
-	}
-
-	.quick-contact-item h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: #1E40AF;
-		margin-bottom: 0.5rem;
-	}
-
-	.quick-contact-item p {
-		color: #6b7280;
-		margin-bottom: 1.5rem;
-	}
-
-	.faq-section {
-		background: white;
-	}
-
-	.faq-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-		gap: 2rem;
-		margin-top: 3rem;
-	}
-
-	.faq-item {
-		background: #f8fafc;
-		padding: 2rem;
-		border-radius: 1rem;
-		border-left: 4px solid #3B82F6;
-	}
-
-	.faq-item h3 {
-		font-size: 1.125rem;
-		font-weight: 600;
-		color: #1E40AF;
-		margin-bottom: 1rem;
-	}
-
-	.faq-item p {
-		color: #4b5563;
-		line-height: 1.6;
-		margin: 0;
-	}
-
-	@media (max-width: 768px) {
-		.page-hero {
-			background-attachment: scroll;
-		}
-		
-		.contact-content {
-			grid-template-columns: 1fr;
-			gap: 2rem;
-		}
-
-		.form-row {
-			grid-template-columns: 1fr;
-		}
-
-		.quick-contact-content {
-			grid-template-columns: 1fr;
-		}
-
-		.faq-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.hero-title {
-			font-size: 2rem;
-		}
-	}
-</style>
-
-<script>
-	// Form submission handler
-	document.getElementById('contact-form')?.addEventListener('submit', function(e) {
-		e.preventDefault();
-		
-		// Get form data
-		const formData = new FormData(this);
-		const data = Object.fromEntries(formData);
-		
-		// Simple validation
-		if (!data.firstName || !data.lastName || !data.email || !data.service || !data.message) {
-			alert('Please fill in all required fields.');
-			return;
-		}
-		
-		// Submit form to Supabase Edge Function
-		const submitButton = this.querySelector('.form-submit');
-		const originalText = submitButton.textContent;
-		
-		submitButton.textContent = 'Sending...';
-		submitButton.disabled = true;
-		
-		// Send to Supabase Edge Function
-		const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-		const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-		
-		if (!supabaseUrl || !supabaseKey) {
-			alert('Configuration error. Please contact the administrator.');
-			submitButton.textContent = originalText;
-			submitButton.disabled = false;
-			return;
-		}
-		
-		fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${supabaseKey}`,
-			},
-			body: JSON.stringify(data)
-		})
-		.then(response => response.json())
-		.then(result => {
-			if (result.success) {
-				alert('Thank you for your message! We will get back to you within 24 hours.');
-				this.reset();
-			} else {
-				throw new Error(result.error || 'Failed to send message');
-			}
-		})
-		.catch(error => {
-			console.error('Error:', error);
-			alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
-		})
-		.finally(() => {
-			submitButton.textContent = originalText;
-			submitButton.disabled = false;
-		});
-	});
-
-	// Smooth scroll for anchor links (already present, no change needed)
-	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-		anchor.addEventListener('click', function (e) {
-			e.preventDefault();
-			const target = document.querySelector(this.getAttribute('href'));
-			if (target) {
-				target.scrollIntoView({
-					behavior: 'smooth',
-					block: 'start'
-				});
-			}
-		});
-	});
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
 
   console.log("Supabase URL:", import.meta.env.VITE_SUPABASE_URL);
   console.log("Supabase Key:", import.meta.env.VITE_SUPABASE_ANON_KEY?.slice(0, 10) + "...");
-
-</script>
