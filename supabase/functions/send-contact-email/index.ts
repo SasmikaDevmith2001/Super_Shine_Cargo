@@ -76,7 +76,7 @@ Reply to: ${formData.email}
     `.trim()
 
     const emailData = {
-      from: 'Super Shine Cargo <cargo.supershine@gmail.com>', // must be verified
+      from: 'test@resend.test', // must be verified
       to: RECIPIENT_EMAIL,
       subject: emailSubject,
       text: emailBody,
