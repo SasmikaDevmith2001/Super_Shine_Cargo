@@ -101,28 +101,33 @@ Reply to: ${formData.email}
   }
 })
 
-async function sendEmailViaSMTP(
-  emailData: { from: string; to: string; subject: string; text: string; replyTo?: string },
-  gmailUser: string,
-  gmailPassword: string
-): Promise<{ success: boolean; error?: string }> {
+// Replace your sendEmailViaSMTP function with this:
+async function sendEmailViaSMTP(emailData: any): Promise<{ success: boolean; error?: string }> {
   try {
-    // Use a simple HTTP service to send emails (like EmailJS alternative)
-    // For now, we'll simulate success and log the email
-    console.log('Email to be sent:', {
-      from: emailData.from,
-      to: emailData.to,
-      subject: emailData.subject,
-      replyTo: emailData.replyTo,
-      body: emailData.text
-    })
+    const RESEND_API_KEY = Deno.env.get('re_3Tp6HNGj_LqBu2Z6gkBr145SM84xCXr8d');
+    
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Super Shine Cargo <noreply@yourdomain.com>', // Use your domain
+        to: [emailData.to],
+        subject: emailData.subject,
+        text: emailData.text,
+        reply_to: emailData.replyTo
+      }),
+    });
 
-    // In production, you would integrate with Gmail SMTP or use a service like Resend
-    // For testing purposes, we'll return success
-    return { success: true }
-
+    if (response.ok) {
+      return { success: true };
+    } else {
+      const error = await response.text();
+      return { success: false, error };
+    }
   } catch (error) {
-    console.error('Email sending error:', error)
-    return { success: false, error: error.message }
+    return { success: false, error: error.message };
   }
 }
