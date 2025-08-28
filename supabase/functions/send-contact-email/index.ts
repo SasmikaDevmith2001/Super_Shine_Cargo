@@ -34,6 +34,7 @@ serve(async (req) => {
 
     const formData: ContactFormData = await req.json()
 
+    // Validate required fields
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.service || !formData.message) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
@@ -41,7 +42,7 @@ serve(async (req) => {
       )
     }
 
-    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') // ✅ environment variable
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') // store as env variable
     const RECIPIENT_EMAIL = Deno.env.get('RECIPIENT_EMAIL') || formData.email
 
     if (!RESEND_API_KEY) {
@@ -74,21 +75,57 @@ This email was sent from the Super Shine Cargo contact form.
 Reply to: ${formData.email}
     `.trim()
 
-    const response = await sendEmailViaSMTP({
-      from: 'Super Shine Cargo <itworked@supershinecargo.com>',
+    const emailData = {
+      from: 'Super Shine Cargo <cargo.supershine@gmail.com>', // must be verified
       to: RECIPIENT_EMAIL,
       subject: emailSubject,
       text: emailBody,
       replyTo: formData.email
-    }, RESEND_API_KEY)
+    }
 
-    if (response.success) {
+    // Validate email fields before sending
+    if (!emailData.from || !emailData.to || !emailData.subject || !emailData.text) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid email payload' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate replyTo email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (emailData.replyTo && !emailRegex.test(emailData.replyTo)) {
+      emailData.replyTo = undefined
+    }
+
+    console.log('Sending email via Resend:', JSON.stringify(emailData, null, 2))
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: emailData.from,
+        to: [emailData.to],
+        subject: emailData.subject,
+        text: emailData.text,
+        reply_to: emailData.replyTo
+      }),
+    })
+
+    if (response.ok) {
       return new Response(
         JSON.stringify({ success: true, message: 'Email sent successfully' }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     } else {
-      throw new Error(response.error || 'Failed to send email')
+      const errorText = await response.text()
+      console.error('Resend API error:', errorText)
+      return new Response(
+        JSON.stringify({ error: 'Failed to send email', details: errorText }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
 
   } catch (error) {
@@ -99,31 +136,3 @@ Reply to: ${formData.email}
     )
   }
 })
-
-async function sendEmailViaSMTP(emailData: any, apiKey: string): Promise<{ success: boolean; error?: string }> {
-  try {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`, // ✅ use the variable
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: emailData.from,
-        to: [emailData.to],
-        subject: emailData.subject,
-        text: emailData.text,
-        reply_to: emailData.replyTo
-      }),
-    });
-
-    if (response.ok) {
-      return { success: true };
-    } else {
-      const error = await response.text();
-      return { success: false, error };
-    }
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-}
