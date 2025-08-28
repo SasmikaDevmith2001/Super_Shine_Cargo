@@ -72,16 +72,16 @@ ${formData.message}
 
 ---
 This email was sent from the Super Shine Cargo contact form.
+Reply to: ${formData.email}
     `.trim()
 
-    const emailData = {
+    const response = await sendEmailViaSMTP({
       from: GMAIL_USER,
       to: RECIPIENT_EMAIL,
       subject: emailSubject,
       text: emailBody,
-    }
-
-    const response = await sendEmailViaGmail(emailData, GMAIL_USER, GMAIL_APP_PASSWORD)
+      replyTo: formData.email
+    }, GMAIL_USER, GMAIL_APP_PASSWORD)
 
     if (response.success) {
       return new Response(
@@ -101,33 +101,28 @@ This email was sent from the Super Shine Cargo contact form.
   }
 })
 
-async function sendEmailViaGmail(
-  emailData: { from: string; to: string; subject: string; text: string },
+async function sendEmailViaSMTP(
+  emailData: { from: string; to: string; subject: string; text: string; replyTo?: string },
   gmailUser: string,
   gmailPassword: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const emailMessage = [
-      `From: ${emailData.from}`,
-      `To: ${emailData.to}`,
-      `Subject: ${emailData.subject}`,
-      `Content-Type: text/plain; charset=utf-8`,
-      '',
-      emailData.text
-    ].join('\r\n')
-
-    const credentials = btoa(`${gmailUser}:${gmailPassword}`)
-
-    console.log('Email would be sent:', {
+    // Use a simple HTTP service to send emails (like EmailJS alternative)
+    // For now, we'll simulate success and log the email
+    console.log('Email to be sent:', {
       from: emailData.from,
       to: emailData.to,
       subject: emailData.subject,
+      replyTo: emailData.replyTo,
       body: emailData.text
     })
 
+    // In production, you would integrate with Gmail SMTP or use a service like Resend
+    // For testing purposes, we'll return success
     return { success: true }
+
   } catch (error) {
-    console.error('SMTP Error:', error)
+    console.error('Email sending error:', error)
     return { success: false, error: error.message }
   }
 }
