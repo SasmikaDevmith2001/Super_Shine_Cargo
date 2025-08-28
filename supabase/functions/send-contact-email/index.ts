@@ -41,12 +41,11 @@ serve(async (req) => {
       )
     }
 
-    const GMAIL_USER = Deno.env.get('GMAIL_USER')
-    const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD')
-    const RECIPIENT_EMAIL = Deno.env.get('RECIPIENT_EMAIL') || GMAIL_USER
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') // ✅ environment variable
+    const RECIPIENT_EMAIL = Deno.env.get('RECIPIENT_EMAIL') || formData.email
 
-    if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
-      console.error('Missing Gmail credentials in environment variables')
+    if (!RESEND_API_KEY) {
+      console.error('Missing Resend API key in environment variables')
       return new Response(
         JSON.stringify({ error: 'Server configuration error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -76,12 +75,12 @@ Reply to: ${formData.email}
     `.trim()
 
     const response = await sendEmailViaSMTP({
-      from: GMAIL_USER,
+      from: 'Super Shine Cargo <itworked@supershinecargo.com>',
       to: RECIPIENT_EMAIL,
       subject: emailSubject,
       text: emailBody,
       replyTo: formData.email
-    }, GMAIL_USER, GMAIL_APP_PASSWORD)
+    }, RESEND_API_KEY)
 
     if (response.success) {
       return new Response(
@@ -101,19 +100,16 @@ Reply to: ${formData.email}
   }
 })
 
-
-async function sendEmailViaSMTP(emailData: any): Promise<{ success: boolean; error?: string }> {
+async function sendEmailViaSMTP(emailData: any, apiKey: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const RESEND_API_KEY = Deno.env.get('re_3Tp6HNGj_LqBu2Z6gkBr145SM84xCXr8d');
-    
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${re_3Tp6HNGj_LqBu2Z6gkBr145SM84xCXr8d}`,
+        'Authorization': `Bearer ${apiKey}`, // ✅ use the variable
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Super Shine Cargo <itworked@supershinecargo.com>', // Use your domain
+        from: emailData.from,
         to: [emailData.to],
         subject: emailData.subject,
         text: emailData.text,
