@@ -101,7 +101,7 @@ Reply to: ${formData.email}
   }
 })
 
-// Replace your sendEmailViaSMTP function with this:
+
 async function sendEmailViaSMTP(emailData: any): Promise<{ success: boolean; error?: string }> {
   try {
     const RESEND_API_KEY = Deno.env.get('re_3Tp6HNGj_LqBu2Z6gkBr145SM84xCXr8d');
