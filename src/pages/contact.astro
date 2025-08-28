@@ -592,19 +592,49 @@ import Footer from '../components/Footer.astro';
 			return;
 		}
 		
-		// Simulate form submission
+		// Submit form to Supabase Edge Function
 		const submitButton = this.querySelector('.form-submit');
 		const originalText = submitButton.textContent;
 		
 		submitButton.textContent = 'Sending...';
 		submitButton.disabled = true;
 		
-		setTimeout(() => {
-			alert('Thank you for your message! We will get back to you within 24 hours.');
-			this.reset();
+		// Send to Supabase Edge Function
+		const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+		const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+		
+		if (!supabaseUrl || !supabaseKey) {
+			alert('Configuration error. Please contact the administrator.');
 			submitButton.textContent = originalText;
 			submitButton.disabled = false;
-		}, 2000);
+			return;
+		}
+		
+		fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${supabaseKey}`,
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+		.then(result => {
+			if (result.success) {
+				alert('Thank you for your message! We will get back to you within 24 hours.');
+				this.reset();
+			} else {
+				throw new Error(result.error || 'Failed to send message');
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+			alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
+		})
+		.finally(() => {
+			submitButton.textContent = originalText;
+			submitButton.disabled = false;
+		});
 	});
 
 	// Smooth scroll for anchor links
