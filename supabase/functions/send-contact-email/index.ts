@@ -113,7 +113,7 @@ async function sendEmailViaSMTP(emailData: any): Promise<{ success: boolean; err
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Super Shine Cargo <noreply@yourdomain.com>', // Use your domain
+        from: 'Super Shine Cargo <itworked@yoyo.com>', // Use your domain
         to: [emailData.to],
         subject: emailData.subject,
         text: emailData.text,
