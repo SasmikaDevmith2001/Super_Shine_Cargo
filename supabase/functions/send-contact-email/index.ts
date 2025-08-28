@@ -109,7 +109,7 @@ async function sendEmailViaSMTP(emailData: any): Promise<{ success: boolean; err
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Authorization': `Bearer ${re_3Tp6HNGj_LqBu2Z6gkBr145SM84xCXr8d}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
