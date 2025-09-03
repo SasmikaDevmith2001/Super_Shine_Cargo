@@ -8,27 +8,21 @@ import Footer from '../components/Footer.astro';
 	<Header />
 	
 	<!-- Hero Section -->
-	<section class="page-hero">
+	<section class="hero" style="background-image: url('https://images.pexels.com/photos/1427107/pexels-photo-1427107.jpeg')">
 		<div class="hero-overlay"></div>
 		<div class="container">
 			<div class="hero-content">
-				<h1 class="hero-title">Services</h1>
+				<h1 class="hero-title">Our Comprehensive Services</h1>
+				<p class="hero-subtitle">From Colombo Port to any corner of the globe — we provide complete logistics solutions tailored to your business needs. Discover our full range of cargo and logistics services designed to move your business forward.</p>
+				<div class="hero-actions">
+					<a href="/contact" class="btn btn-primary">Get Free Quote</a>
+					<a href="/about" class="btn btn-secondary">About Us</a>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<main style="padding-top: 80px;">
-		<!-- Hero Section -->
-		<section class="services-hero section">
-			<div class="container">
-				<h1 class="section-title">Our Comprehensive Services</h1>
-				<p class="section-subtitle">
-					From Colombo Port to any corner of the globe — we provide complete logistics solutions 
-					tailored to your business needs. Discover our full range of cargo and logistics services.
-				</p>
-			</div>
-		</section>
-
+	<main>
 		<!-- Services Grid -->
 		<section class="section services-main">
 			<div class="container">
@@ -283,11 +277,11 @@ import Footer from '../components/Footer.astro';
 </Layout>
 
 <style>
-	.page-hero {
-		min-height: 40vh;
-		background-image: url('https://images.pexels.com/photos/1427107/pexels-photo-1427107.jpeg');
+	.hero {
+		min-height: 100vh;
 		background-size: cover;
 		background-position: center;
+		background-attachment: fixed;
 		display: flex;
 		align-items: center;
 		position: relative;
@@ -307,19 +301,54 @@ import Footer from '../components/Footer.astro';
 		position: relative;
 		z-index: 1;
 		text-align: center;
+		max-width: 800px;
+		margin: 0 auto;
 		color: white;
 	}
 
 	.hero-title {
-		font-size: 3rem;
+		font-size: 3.5rem;
 		font-weight: 700;
-		margin: 0;
+		margin-bottom: 1.5rem;
+		line-height: 1.2;
 	}
 
-	.services-hero {
-		background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-		padding: 4rem 0;
-		text-align: center;
+	.hero-subtitle {
+		font-size: 1.25rem;
+		margin-bottom: 2.5rem;
+		opacity: 0.95;
+		line-height: 1.6;
+	}
+
+	.hero-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	@media (max-width: 768px) {
+		.hero {
+			min-height: 70vh;
+			background-attachment: scroll;
+		}
+
+		.hero-title {
+			font-size: 2.5rem;
+		}
+
+		.hero-subtitle {
+			font-size: 1.125rem;
+		}
+
+		.hero-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.btn {
+			width: 200px;
+		}
 	}
 
 	.services-main {
@@ -494,10 +523,6 @@ import Footer from '../components/Footer.astro';
 	}
 
 	@media (max-width: 768px) {
-		.page-hero {
-			background-attachment: scroll;
-		}
-		
 		.services-grid {
 			grid-template-columns: 1fr;
 		}
@@ -521,10 +546,6 @@ import Footer from '../components/Footer.astro';
 
 		.btn {
 			width: 250px;
-		}
-
-		.hero-title {
-			font-size: 2rem;
 		}
 	}
 
