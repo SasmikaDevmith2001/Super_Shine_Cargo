@@ -7,17 +7,11 @@ import Footer from '../components/Footer.astro';
 <Layout title="Contact Us - Super Shine Cargo" description="Get in touch with Super Shine Cargo for all your logistics needs. Contact us for quotes, inquiries, and customer support">
 	<Header />
 	
-	<!-- Hero Section -->
-	<section class="hero" style="background-image: url('https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg')">
-		<div class="hero-overlay"></div>
+	<section class="hero">
 		<div class="container">
 			<div class="hero-content">
 				<h1 class="hero-title">Contact Us</h1>
 				<p class="hero-subtitle">Ready to ship your cargo? Get in touch with our expert team for personalized logistics solutions. We're here to help you navigate the complexities of international shipping and customs clearance.</p>
-				<div class="hero-actions">
-					<a href="#contact-form" class="btn btn-primary">Send Message</a>
-					<a href="tel:+94112433581" class="btn btn-secondary">Call Now</a>
-				</div>
 			</div>
 		</div>
 	</section>
@@ -270,23 +264,12 @@ import Footer from '../components/Footer.astro';
 
 <style>
 	.hero {
-		min-height: 100vh;
-		background-size: cover;
-		background-position: center;
-		background-attachment: fixed;
+		min-height: 60vh;
+		background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
 		display: flex;
 		align-items: center;
 		position: relative;
 		padding-top: 80px;
-	}
-
-	.hero-overlay {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
 	}
 
 	.hero-content {
@@ -312,17 +295,9 @@ import Footer from '../components/Footer.astro';
 		line-height: 1.6;
 	}
 
-	.hero-actions {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		flex-wrap: wrap;
-	}
-
 	@media (max-width: 768px) {
 		.hero {
-			min-height: 70vh;
-			background-attachment: scroll;
+			min-height: 50vh;
 		}
 
 		.hero-title {
@@ -331,15 +306,6 @@ import Footer from '../components/Footer.astro';
 
 		.hero-subtitle {
 			font-size: 1.125rem;
-		}
-
-		.hero-actions {
-			flex-direction: column;
-			align-items: center;
-		}
-
-		.btn {
-			width: 200px;
 		}
 	}
 
