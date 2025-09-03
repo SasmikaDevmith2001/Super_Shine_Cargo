@@ -7,14 +7,16 @@ import Footer from '../components/Footer.astro';
 <Layout title="Contact Us - Super Shine Cargo" description="Get in touch with Super Shine Cargo for all your logistics needs. Contact us for quotes, inquiries, and customer support">
 	<Header />
 	
-	<section class="hero">
-		<div class="container">
-			<div class="hero-content">
-				<h1 class="hero-title">Contact Us</h1>
-				<p class="hero-subtitle">Ready to ship your cargo? Get in touch with our expert team for personalized logistics solutions. We're here to help you navigate the complexities of international shipping and customs clearance.</p>
-			</div>
+	<!-- Hero Section -->
+	<section class="hero" style="background-image: url(''); overflow: hidden; min-height: 40vh; background-size: auto; background-position: center; background-attachment: fixed; padding-top: 80px; justify-content: center; text-align: center;">
+	<div class="hero-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+	background-color: rgba(0, 0, 0, 0.5);"></div>
+	<div class="container" style="position: relative; z-index: 1;">
+		<div class="hero-content">
+			<h1 class="hero-title" style="color: #fff; font-size: 2.5rem; margin: 0;">Contact Us</h1>
 		</div>
-	</section>
+	</div>
+</section>
 
 	<main>
 		<!-- Contact Form & Info Section -->
@@ -177,44 +179,7 @@ import Footer from '../components/Footer.astro';
 		</section>
 
 		<!-- Quick Contact Section -->
-		<section class="section quick-contact">
-			<div class="container">
-				<div class="quick-contact-content">
-					<div class="quick-contact-item">
-						<div class="quick-icon">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-							</svg>
-						</div>
-						<h3>Call Us Now</h3>
-						<p>Speak directly with our logistics experts</p>
-						<a href="tel:+94xxxxxxxx" class="btn btn-primary">+94 [Insert Number]</a>
-					</div>
-					
-					<div class="quick-contact-item">
-						<div class="quick-icon">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-							</svg>
-						</div>
-						<h3>Email Us</h3>
-						<p>Send us your inquiry anytime</p>
-						<a href="mailto:info@supershinecargo.lk" class="btn btn-primary">Send Email</a>
-					</div>
-					
-					<div class="quick-contact-item">
-						<div class="quick-icon">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-							</svg>
-						</div>
-						<h3>Get a Quote</h3>
-						<p>Request a customized shipping quote</p>
-						<a href="#contact-form" class="btn btn-primary">Request Quote</a>
-					</div>
-				</div>
-			</div>
-		</section>
+		
 
 		<!-- FAQ Section -->
 		<section class="section faq-section">
@@ -264,12 +229,23 @@ import Footer from '../components/Footer.astro';
 
 <style>
 	.hero {
-		min-height: 60vh;
-		background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+		min-height: 100vh;
+		background-size: cover;
+		background-position: center;
+		background-attachment: fixed;
 		display: flex;
 		align-items: center;
 		position: relative;
 		padding-top: 80px;
+	}
+
+	.hero-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
 	}
 
 	.hero-content {
@@ -295,9 +271,17 @@ import Footer from '../components/Footer.astro';
 		line-height: 1.6;
 	}
 
+	.hero-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
 	@media (max-width: 768px) {
 		.hero {
-			min-height: 50vh;
+			min-height: 70vh;
+			background-attachment: scroll;
 		}
 
 		.hero-title {
@@ -306,6 +290,15 @@ import Footer from '../components/Footer.astro';
 
 		.hero-subtitle {
 			font-size: 1.125rem;
+		}
+
+		.hero-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.btn {
+			width: 200px;
 		}
 	}
 
@@ -591,17 +584,17 @@ import Footer from '../components/Footer.astro';
 		const supabaseUrl = 'https://lwcdhsakltnxolsxpjvb.supabase.co';
 		const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3Y2Roc2FrbHRueG9sc3hwanZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNjc3MDMsImV4cCI6MjA3MTk0MzcwM30.Y9eBxaBJWCLS10d91_0QOgHRB_vlMNJf0mFQ8Pwi6bY';
 		
-		fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
+		fetch(${supabaseUrl}/functions/v1/send-contact-email, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${supabaseKey}`,
+				'Authorization': Bearer ${supabaseKey},
 			},
 			body: JSON.stringify(data)
 		})
 		.then(response => {
 			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
+				throw new Error(HTTP error! status: ${response.status});
 			}
 			return response.json();
 		})
