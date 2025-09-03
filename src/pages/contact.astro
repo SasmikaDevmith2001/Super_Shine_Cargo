@@ -584,17 +584,17 @@ import Footer from '../components/Footer.astro';
 		const supabaseUrl = 'https://lwcdhsakltnxolsxpjvb.supabase.co';
 		const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3Y2Roc2FrbHRueG9sc3hwanZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNjc3MDMsImV4cCI6MjA3MTk0MzcwM30.Y9eBxaBJWCLS10d91_0QOgHRB_vlMNJf0mFQ8Pwi6bY';
 		
-		fetch(${supabaseUrl}/functions/v1/send-contact-email, {
+		fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': Bearer ${supabaseKey},
+				'Authorization': `Bearer ${supabaseKey}`,
 			},
 			body: JSON.stringify(data)
 		})
 		.then(response => {
 			if (!response.ok) {
-				throw new Error(HTTP error! status: ${response.status});
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 			return response.json();
 		})
