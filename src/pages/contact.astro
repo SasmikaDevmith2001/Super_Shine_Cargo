@@ -580,9 +580,16 @@ import Footer from '../components/Footer.astro';
 		submitButton.textContent = 'Sending...';
 		submitButton.disabled = true;
 		
-		// Use hardcoded values from your .env file
-		const supabaseUrl = 'https://lwcdhsakltnxolsxpjvb.supabase.co';
-		const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3Y2Roc2FrbHRueG9sc3hwanZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNjc3MDMsImV4cCI6MjA3MTk0MzcwM30.Y9eBxaBJWCLS10d91_0QOgHRB_vlMNJf0mFQ8Pwi6bY';
+		// Use environment variables for Supabase configuration
+		const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+		const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+		
+		if (!supabaseUrl || !supabaseKey) {
+			alert('Configuration error - please contact administrator');
+			submitButton.textContent = originalText;
+			submitButton.disabled = false;
+			return;
+		}
 		
 		fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
 			method: 'POST',
