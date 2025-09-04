@@ -1,3 +1,5 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -17,7 +19,7 @@ interface ContactFormData {
   message: string
 }
 
-Deno.serve(async (req) => {
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -40,20 +42,16 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Get Gmail configuration from environment variables
-    const GMAIL_USER = Deno.env.get('GMAIL_USER')
-    const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD')
-    const RECIPIENT_EMAIL = Deno.env.get('RECIPIENT_EMAIL')
-
-    if (!GMAIL_USER || !GMAIL_APP_PASSWORD || !RECIPIENT_EMAIL) {
-      console.error('Missing Gmail configuration in environment variables')
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
+    if (!RESEND_API_KEY) {
+      console.error('Missing Resend API key in environment variables')
       return new Response(
-        JSON.stringify({ error: 'Configuration error - please contact administrator' }),
+        JSON.stringify({ error: 'Server configuration error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
-    const emailSubject = `New Contact Form Submission from ${formData.firstName} ${formData.lastName}`
+    const emailSubject = New Contact Form Submission from ${formData.firstName} ${formData.lastName}
 
     const emailBody = `
 New contact form submission from Super Shine Cargo website:
@@ -75,53 +73,50 @@ This email was sent from the Super Shine Cargo contact form.
 Reply to: ${formData.email}
 `.trim()
 
-    // Create email using Gmail SMTP
+    // Use Resend test email addresses
     const emailData = {
-      from: GMAIL_USER,
-      to: RECIPIENT_EMAIL,
+      from: 'onboarding@resend.dev',           // verified Resend email for testing
+      to: 'delivered@resend.dev',        // test recipient email cargo.supershine@gmail.com delivered@resend.dev
       subject: emailSubject,
       text: emailBody,
       replyTo: formData.email
     }
 
-    // Use Gmail SMTP via a simple HTTP service
-    const smtpResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    console.log('Sending test email via Resend:', JSON.stringify(emailData, null, 2))
+
+    const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        'Authorization': Bearer ${RESEND_API_KEY},
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        service_id: 'gmail',
-        template_id: 'template_contact',
-        user_id: 'public_key',
-        template_params: {
-          from_name: `${formData.firstName} ${formData.lastName}`,
-          from_email: formData.email,
-          to_email: RECIPIENT_EMAIL,
-          subject: emailSubject,
-          message: emailBody,
-          reply_to: formData.email
-        }
-      })
+        from: emailData.from,
+        to: [emailData.to],
+        subject: emailData.subject,
+        text: emailData.text,
+        reply_to: emailData.replyTo
+      }),
     })
 
-    // For now, we'll simulate success since we need proper SMTP setup
-    // In production, you would implement actual Gmail SMTP here
-    console.log('Contact form submission received:', {
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      service: formData.service
-    })
-
-    return new Response(
-      JSON.stringify({ success: true, message: 'Message sent successfully' }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ success: true, message: 'Test email sent successfully' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      const errorText = await response.text()
+      console.error('Resend API error:', errorText)
+      return new Response(
+        JSON.stringify({ error: 'Failed to send test email', details: errorText }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
 
   } catch (error) {
     console.error('Error in send-contact-email function:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to send message', details: error.message }),
+      JSON.stringify({ error: 'Failed to send test email', details: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
