@@ -32,28 +32,65 @@ serve(async (req) => {
       )
     }
 
+    // Add debug logging
+    console.log('Function called, checking environment variables...')
+
     const formData: ContactFormData = await req.json()
+    console.log('Form data received:', {
+      firstName: formData.firstName,
+      email: formData.email,
+      service: formData.service
+    })
 
     // Validate required fields
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.service || !formData.message) {
+      console.error('Missing required fields:', {
+        firstName: !!formData.firstName,
+        lastName: !!formData.lastName,
+        email: !!formData.email,
+        service: !!formData.service,
+        message: !!formData.message
+      })
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
+    // Check for API key with detailed logging
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
+    console.log('Environment variables check:', {
+      hasResendKey: !!RESEND_API_KEY,
+      keyLength: RESEND_API_KEY ? RESEND_API_KEY.length : 0,
+      keyPrefix: RESEND_API_KEY ? RESEND_API_KEY.substring(0, 10) + '...' : 'undefined'
+    })
+
     if (!RESEND_API_KEY) {
-      console.error('Missing Resend API key in environment variables')
+      console.error('RESEND_API_KEY is missing from environment variables')
+      console.error('Available environment variables:', Object.keys(Deno.env.toObject()))
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
+        JSON.stringify({ 
+          error: 'Server configuration error - Missing API key',
+          debug: 'RESEND_API_KEY not found in environment'
+        }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate API key format
+    if (!RESEND_API_KEY.startsWith('re_')) {
+      console.error('Invalid RESEND_API_KEY format - should start with re_')
+      return new Response(
+        JSON.stringify({ 
+          error: 'Server configuration error - Invalid API key format',
+          debug: 'API key should start with re_'
+        }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
     const emailSubject = New Contact Form Submission from ${formData.firstName} ${formData.lastName}
     
-    // Create HTML version for better formatting
     const emailHtml = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
       <h2 style="color: #2c3e50;">New Contact Form Submission</h2>
@@ -130,22 +167,21 @@ This email was sent from the Super Shine Cargo contact form.
 Reply to: ${formData.email}
     `.trim()
 
-    // CRITICAL FIX: Use your verified domain for the 'from' address
     const emailData = {
-      from: 'noreply@supershinecargo.com',      // FIXED: Use your verified domain
-      to: 'cargo.supershine@gmail.com',        // This should be the email you signed up with for Resend trial
+      from: 'noreply@supershinecargo.com',
+      to: 'cargo.supershine@gmail.com',
       subject: emailSubject,
-      html: emailHtml,                         // Added HTML version
-      text: emailText,                         // Keep text version for fallback
-      replyTo: formData.email                  // Customer can be replied to directly
+      html: emailHtml,
+      text: emailText,
+      replyTo: formData.email
     }
 
-    console.log('Sending email via Resend:', JSON.stringify({
+    console.log('Attempting to send email with data:', {
       from: emailData.from,
       to: emailData.to,
       subject: emailData.subject,
       replyTo: emailData.replyTo
-    }, null, 2))
+    })
 
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -164,9 +200,11 @@ Reply to: ${formData.email}
     })
 
     const responseData = await response.json()
-    console.log('Resend API response:', responseData)
+    console.log('Resend API response status:', response.status)
+    console.log('Resend API response data:', responseData)
 
     if (response.ok) {
+      console.log('Email sent successfully with ID:', responseData.id)
       return new Response(
         JSON.stringify({ 
           success: true, 
@@ -176,21 +214,38 @@ Reply to: ${formData.email}
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     } else {
-      console.error('Resend API error:', responseData)
+      console.error('Resend API error response:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData
+      })
+      
+      // Return more specific error messages
+      let errorMessage = 'Failed to send email'
+      if (responseData.message) {
+        errorMessage = responseData.message
+      }
+      
       return new Response(
         JSON.stringify({ 
-          error: 'Failed to send email', 
-          details: responseData.message || 'Unknown error' 
+          error: errorMessage,
+          details: responseData,
+          debug: HTTP ${response.status}: ${response.statusText}
         }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
   } catch (error) {
-    console.error('Error in send-contact-email function:', error)
+    console.error('Unhandled error in send-contact-email function:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to process contact form', 
-        details: error.message 
+        error: 'Failed to process contact form',
+        details: error.message,
+        type: error.name
       }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
