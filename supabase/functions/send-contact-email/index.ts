@@ -52,8 +52,65 @@ serve(async (req) => {
     }
 
     const emailSubject = New Contact Form Submission from ${formData.firstName} ${formData.lastName}
+    
+    // Create HTML version for better formatting
+    const emailHtml = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <h2 style="color: #2c3e50;">New Contact Form Submission</h2>
+      <p><strong>From:</strong> Super Shine Cargo Website</p>
+      <hr style="border: 1px solid #eee;">
+      
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Name:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.firstName} ${formData.lastName}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${formData.email}">${formData.email}</a></td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Phone:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.phone || 'Not provided'}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Company:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.company || 'Not provided'}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Service Required:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.service}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Origin:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.origin || 'Not provided'}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Destination:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.destination || 'Not provided'}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Cargo Details:</strong></td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formData.cargoDetails || 'Not provided'}</td>
+        </tr>
+      </table>
+      
+      <div style="margin-top: 20px;">
+        <h3 style="color: #2c3e50;">Message:</h3>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff;">
+          ${formData.message.replace(/\n/g, '<br>')}
+        </div>
+      </div>
+      
+      <hr style="border: 1px solid #eee; margin: 20px 0;">
+      <p style="color: #666; font-size: 12px;">
+        This email was sent from the Super Shine Cargo contact form.<br>
+        Reply directly to this email to respond to the customer.
+      </p>
+    </div>
+    `
 
-    const emailBody = `
+    const emailText = `
 New contact form submission from Super Shine Cargo website:
 
 Name: ${formData.firstName} ${formData.lastName}
@@ -71,18 +128,24 @@ ${formData.message}
 ---
 This email was sent from the Super Shine Cargo contact form.
 Reply to: ${formData.email}
-`.trim()
+    `.trim()
 
-    // Use Resend test email addresses
+    // CRITICAL FIX: Use your verified domain for the 'from' address
     const emailData = {
-      from: 'onboarding@resend.dev',           // verified Resend email for testing
-      to: 'delivered@resend.dev',        // test recipient email cargo.supershine@gmail.com delivered@resend.dev
+      from: 'noreply@supershinecargo.com',      // FIXED: Use your verified domain
+      to: 'cargo.supershine@gmail.com',        // This should be the email you signed up with for Resend trial
       subject: emailSubject,
-      text: emailBody,
-      replyTo: formData.email
+      html: emailHtml,                         // Added HTML version
+      text: emailText,                         // Keep text version for fallback
+      replyTo: formData.email                  // Customer can be replied to directly
     }
 
-    console.log('Sending test email via Resend:', JSON.stringify(emailData, null, 2))
+    console.log('Sending email via Resend:', JSON.stringify({
+      from: emailData.from,
+      to: emailData.to,
+      subject: emailData.subject,
+      replyTo: emailData.replyTo
+    }, null, 2))
 
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -94,29 +157,41 @@ Reply to: ${formData.email}
         from: emailData.from,
         to: [emailData.to],
         subject: emailData.subject,
+        html: emailData.html,
         text: emailData.text,
         reply_to: emailData.replyTo
       }),
     })
 
+    const responseData = await response.json()
+    console.log('Resend API response:', responseData)
+
     if (response.ok) {
       return new Response(
-        JSON.stringify({ success: true, message: 'Test email sent successfully' }),
+        JSON.stringify({ 
+          success: true, 
+          message: 'Contact form submitted successfully',
+          emailId: responseData.id 
+        }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     } else {
-      const errorText = await response.text()
-      console.error('Resend API error:', errorText)
+      console.error('Resend API error:', responseData)
       return new Response(
-        JSON.stringify({ error: 'Failed to send test email', details: errorText }),
+        JSON.stringify({ 
+          error: 'Failed to send email', 
+          details: responseData.message || 'Unknown error' 
+        }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
-
   } catch (error) {
     console.error('Error in send-contact-email function:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to send test email', details: error.message }),
+      JSON.stringify({ 
+        error: 'Failed to process contact form', 
+        details: error.message 
+      }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
