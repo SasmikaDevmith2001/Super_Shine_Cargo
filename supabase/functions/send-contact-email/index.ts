@@ -21,7 +21,7 @@ interface ContactFormData {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('OK', { headers: corsHeaders })
   }
 
   try {
