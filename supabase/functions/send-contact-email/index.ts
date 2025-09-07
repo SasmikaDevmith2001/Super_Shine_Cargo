@@ -89,7 +89,7 @@ serve(async (req) => {
       )
     }
 
-    const emailSubject = New Contact Form Submission from ${formData.firstName} ${formData.lastName}
+    const emailSubject = `New Contact Form Submission from ${formData.firstName} ${formData.lastName}`
     
     const emailHtml = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
