@@ -8,7 +8,7 @@ import Footer from '../components/Footer.astro';
   title="Contact Us - Super Shine Cargo"
   description="Get in touch with Super Shine Cargo for all your logistics needs. Contact us for quotes, inquiries, and customer support"
 >
-  <Header />
+  <header />
   <!-- Hero Section -->
   <section
     class="hero"
@@ -509,7 +509,7 @@ import Footer from '../components/Footer.astro';
           EMAILJS_CONFIG.SERVICE_ID,
           EMAILJS_CONFIG.TEMPLATE_ID,
           {
-            from_name: ${formData.firstName} ${formData.lastName},
+            from_name: `${formData.firstName} ${formData.lastName}`,
             from_email: formData.email,
             phone: formData.phone || "Not provided",
             message: formData.message,
