@@ -9,7 +9,7 @@ import Footer from '../components/Footer.astro';
 	<Header />
 	
 	<Hero 
-		title="Super Shine Cargo"
+		title="Super Shine Cargo Services"
 		subtitle="Your Trusted Logistics Partner in Sri Lanka - For over 25 years, delivering reliable, efficient, and cost-effective cargo solutions across Sri Lanka and beyond."
 		ctaText="Get Quote"
 		ctaLink="/contact"
@@ -48,32 +48,32 @@ import Footer from '../components/Footer.astro';
 				
 				<div class="features-grid">
 					<div class="feature-card">
-						<div class="feature-icon">🏆</div>
+						<div class="feature-icon">🌟</div>
 						<h3>25+ Years of Industry Expertise</h3>
 						<p>Decades of experience in cargo handling and logistics solutions</p>
 					</div>
 					
 					<div class="feature-card">
-						<div class="feature-icon">✅</div>
+						<div class="feature-icon">✔</div>
 						<h3>Hassle-Free Customs Clearance</h3>
 						<p>Streamlined documentation and compliance processes</p>
 					</div>
 					
 					<div class="feature-card">
 						<div class="feature-icon">💰</div>
-						<h3>Competitive Pricing & Timely Delivery</h3>
+						<h3>Affordable & On-Time</h3>
 						<p>Cost-effective solutions without compromising on quality</p>
 					</div>
 					
 					<div class="feature-card">
 						<div class="feature-icon">🌐</div>
-						<h3>Strong Local & International Network</h3>
+						<h3>Global & Local Reach</h3>
 						<p>Trusted partners worldwide for seamless operations</p>
 					</div>
 					
 					<div class="feature-card">
 						<div class="feature-icon">👥</div>
-						<h3>Personalized Service for Every Client</h3>
+						<h3>Tailored Service</h3>
 						<p>Tailored solutions to meet your specific requirements</p>
 					</div>
 					
@@ -156,8 +156,8 @@ import Footer from '../components/Footer.astro';
 				<div class="cta-content">
 					<h2>Ready to Ship Your Cargo?</h2>
 					<div class="cta-actions">
-						<a href="/contact" class="btn btn-primary">Get Free Quote</a>
-						<a href="tel:+94112433581" class="btn btn-secondary">Call Now: +94 11 243 3581</a>
+						<!--<a href="/contact" class="btn btn-primary">Get Free Quote</a>-->
+						<a href="tel:+94xxxxxxxx" class="btn btn-secondary">Call Now: +9411 243 3581</a>
 					</div>
 				</div>
 			</div>
@@ -220,7 +220,7 @@ import Footer from '../components/Footer.astro';
 	}
 
 	.feature-icon {
-		font-size: 3rem;
+		font-size: 2rem;
 		margin-bottom: 1rem;
 	}
 
@@ -234,6 +234,7 @@ import Footer from '../components/Footer.astro';
 	.feature-card p {
 		color: #6b7280;
 		line-height: 1.6;
+		text-align:center;
 	}
 
 	.services-preview {
@@ -275,11 +276,13 @@ import Footer from '../components/Footer.astro';
 		font-weight: 600;
 		margin-bottom: 0.5rem;
 		color: #1E40AF;
+		text-align: center;
 	}
 
 	.service-content p {
 		color: #6b7280;
 		line-height: 1.6;
+		text-align: center;
 	}
 
 	.services-cta {
@@ -312,6 +315,10 @@ import Footer from '../components/Footer.astro';
 		flex-wrap: wrap;
 	}
 
+	.section-subtitle{
+		text-align:center;
+	}
+
 	@media (max-width: 768px) {
 		.about-content {
 			grid-template-columns: 1fr;
@@ -337,7 +344,11 @@ import Footer from '../components/Footer.astro';
 		}
 
 		.btn {
-			width: 250px;
+			width: 380px;
+		}
+
+		.btn btn-primary{
+			margin-left: 55px;
 		}
 	}
 </style>
