@@ -44,6 +44,9 @@ import Footer from '../components/Footer.astro';
 		<section class="section values-section">
 			<div class="container">
 				<h2 class="section-title">Our Core Values</h2>
+				<p class="section-subtitle">
+					The principles that guide everything we do
+				</p>
 				
 				<div class="values-grid">
 					<div class="value-card">
@@ -118,6 +121,9 @@ import Footer from '../components/Footer.astro';
 		<section class="section team-section">
 			<div class="container">
 				<h2 class="section-title">Our Expert Team</h2>
+				<p class="section-subtitle">
+					Meet the professionals dedicated to handling your cargo with care
+				</p>
 				
 				<div class="team-content">
 					<div class="team-image">
@@ -136,10 +142,10 @@ import Footer from '../components/Footer.astro';
 							final delivery.
 						</p>
 						<ul class="team-features">
-							<li>✅ Certified customs brokers</li>
-							<li>✅ Experienced logistics coordinators</li>
-							<li>✅ Dedicated customer support team</li>
-							<li>✅ Local and international expertise</li>
+							<li>⚫ Certified customs brokers</li>
+							<li>⚫ Experienced logistics coordinators</li>
+							<li>⚫ Dedicated customer support team</li>
+							<li>⚫ Local and international expertise</li>
 						</ul>
 					</div>
 				</div>
@@ -245,20 +251,20 @@ import Footer from '../components/Footer.astro';
 	.mvv-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-		gap: 3rem;
+		gap: 6rem;
 	}
 
 	.mvv-card {
 		background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
 		color: white;
-		padding: 3rem 2rem;
+		padding: 2rem 1rem;
 		border-radius: 1rem;
 		text-align: center;
 		box-shadow: 0 20px 40px rgba(30, 64, 175, 0.2);
 	}
 
 	.mvv-icon {
-		font-size: 4rem;
+		font-size: 3rem;
 		margin-bottom: 1.5rem;
 	}
 
@@ -272,6 +278,7 @@ import Footer from '../components/Footer.astro';
 		font-size: 1.125rem;
 		line-height: 1.6;
 		opacity: 0.95;
+		text-align: center;
 	}
 
 	.values-section {
@@ -314,6 +321,7 @@ import Footer from '../components/Footer.astro';
 	.value-card p {
 		color: #6b7280;
 		line-height: 1.6;
+		text-align: center;
 	}
 
 	.experience-section {
@@ -436,6 +444,10 @@ import Footer from '../components/Footer.astro';
 		flex-wrap: wrap;
 	}
 
+	.section-subtitle{
+		text-align: center;
+	}
+
 	@media (max-width: 768px) {
 		.experience-content,
 		.team-content {
@@ -465,7 +477,7 @@ import Footer from '../components/Footer.astro';
 		}
 
 		.btn {
-			width: 250px;
+			width: 380px;
 		}
 	}
 </style>
